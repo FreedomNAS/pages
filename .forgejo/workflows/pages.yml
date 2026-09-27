@@ -1,0 +1,25 @@
+name: pages
+
+on:
+  push:
+    branches: [dev]
+  workflow_dispatch:
+
+jobs:
+  publish:
+    runs-on: docker
+    container:
+      image: node:20-bookworm
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Collect the site
+        run: |
+          mkdir _site
+          cp -r index.html style.css assets _site/
+
+      - uses: https://codeberg.org/git-pages/action@v2
+        with:
+          site: https://${{ forge.repository_owner }}.codeberg.page/
+          token: ${{ forge.token }}
+          source: _site/

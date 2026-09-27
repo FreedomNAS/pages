@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>FreedomNAS — Turn your box into freedom</title>
+  <meta name="description" content="FreedomNAS is an open-source, OS-agnostic NAS: ZFS storage, SMB/NFS shares and a web interface that run the same on Debian, FreeBSD, Arch, Gentoo, Artix and Void.">
+  <link rel="icon" type="image/png" href="assets/logo_cut.png">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="wrap topbar-inner">
+    <a class="brand" href="#top">
+      <img src="assets/logo_cut.png" alt="" width="36" height="36">
+      <span>FreedomNAS</span>
+    </a>
+    <nav class="nav">
+      <a href="#features">Features</a>
+      <a href="#how">How it works</a>
+      <a href="#editions">Editions</a>
+      <a href="#install">Install</a>
+      <a href="https://freedomnas.codeberg.page/freedomnas-docs/">Docs</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+
+  <section class="hero">
+    <div class="wrap hero-inner">
+      <div class="hero-text">
+        <p class="eyebrow">Open-source storage appliance</p>
+        <h1>Your NAS, on <span class="grad">the OS you choose</span>.</h1>
+        <p class="lead">
+          FreedomNAS turns any 64-bit UNIX-like machine into a NAS: ZFS storage,
+          SMB and NFS shares, users, network and updates, all managed from a
+          web interface. The same code runs on Debian, FreeBSD, Arch, Gentoo,
+          Artix and Void.
+        </p>
+        <div class="cta">
+          <a class="btn btn-primary" href="#install">Get started</a>
+          <a class="btn btn-ghost" href="https://codeberg.org/FreedomNAS">Source on Codeberg</a>
+        </div>
+      </div>
+      <div class="hero-logo">
+        <img src="assets/logo_cut.png" alt="FreedomNAS logo" width="360" height="360">
+      </div>
+    </div>
+  </section>
+
+  <section class="principle">
+    <div class="wrap">
+      <blockquote>
+        The software adapts to the system.<br>
+        The system never adapts to the software.
+      </blockquote>
+      <p>
+        FreedomNAS contains no native system command in its code. Every command
+        lives in a JSON profile for the OS it belongs to, so supporting a new
+        system means adding a profile, not rewriting the product.
+      </p>
+    </div>
+  </section>
+
+  <section id="features" class="section">
+    <div class="wrap">
+      <h2>Everything a NAS needs</h2>
+      <p class="section-lead">Managed from the browser, backed by ZFS.</p>
+
+      <div class="grid cards">
+        <article class="card">
+          <h3>ZFS storage</h3>
+          <p>Create pools from the web interface: stripe, mirror or RAIDZ1–3, with optional SSD cache (L2ARC) and log (SLOG) devices. Browse datasets and tune their properties.</p>
+        </article>
+        <article class="card">
+          <h3>Encrypted pools</h3>
+          <p>ZFS native encryption with two independent unlock factors: a USB key for zero-touch boot, or a Master Passphrase at the console.</p>
+        </article>
+        <article class="card">
+          <h3>SMB &amp; NFS shares</h3>
+          <p>Share folders with Windows, macOS and Linux over SMB, or export them over NFS to Unix clients on your network.</p>
+        </article>
+        <article class="card">
+          <h3>Scheduled snapshots</h3>
+          <p>Hourly, daily, weekly and monthly snapshots with retention you set per dataset. Only snapshots the scheduler made are ever pruned.</p>
+        </article>
+        <article class="card">
+          <h3>Safe updates</h3>
+          <p>System packages, containers and firmware updated with Topgrade, live output in the browser, and an optional ZFS snapshot before every run.</p>
+        </article>
+        <article class="card">
+          <h3>Disaster recovery</h3>
+          <p>Your configuration is mirrored onto every pool. Lose the OS disk, reinstall, and hostname, users, shares and policies come back on first boot.</p>
+        </article>
+        <article class="card">
+          <h3>Three interface levels</h3>
+          <p>Assisted for everyday use, Advanced for full control, Expert for diagnostics. Risky actions stay hidden until you ask for them.</p>
+        </article>
+        <article class="card">
+          <h3>Secure by default</h3>
+          <p>HTTPS WebUI, PAM login restricted to administrators, brute-force lockout, and passwords that never appear in logs or process lists.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section id="how" class="section section-alt">
+    <div class="wrap">
+      <h2>How it works</h2>
+      <p class="section-lead">
+        The interface asks for an action, like “create a snapshot”. The engine
+        looks up the command for the running system and executes it.
+      </p>
+
+      <div class="flow" role="img" aria-label="WebUI calls the Core Engine, which reads merged JSON profiles and runs the command on the operating system">
+        <div class="flow-step">
+          <span class="flow-title">WebUI</span>
+          <span class="flow-sub">FastAPI + vanilla JS</span>
+        </div>
+        <div class="flow-arrow" aria-hidden="true"></div>
+        <div class="flow-step">
+          <span class="flow-title">Core Engine</span>
+          <span class="flow-sub">abstract actions</span>
+        </div>
+        <div class="flow-arrow" aria-hidden="true"></div>
+        <div class="flow-step flow-step-accent">
+          <span class="flow-title">JSON profiles</span>
+          <span class="flow-sub">OS + module + init</span>
+        </div>
+        <div class="flow-arrow" aria-hidden="true"></div>
+        <div class="flow-step">
+          <span class="flow-title">Operating system</span>
+          <span class="flow-sub">Linux or FreeBSD</span>
+        </div>
+      </div>
+
+      <div class="grid two">
+        <div>
+          <h3>One action, every system</h3>
+          <p>The same request becomes the right command wherever it runs:</p>
+          <div class="code-wrap">
+<pre><code>engine.execute("services", "start", service_name="smbd")
+
+systemd  →  systemctl start smbd
+OpenRC   →  rc-service smbd start
+runit    →  sv start smbd
+bsd_rc   →  service smbd start</code></pre>
+          </div>
+        </div>
+        <div>
+          <h3>Built to be extended</h3>
+          <ul class="ticks">
+            <li>Adding an OS takes JSON profiles plus a one-line entry in the engine.</li>
+            <li>Modules are discovered from a manifest, so community modules ship in their own repository.</li>
+            <li>Every command FreedomNAS can run is readable in plain JSON files.</li>
+            <li>Configuration stores features, not package names, so it can move between editions.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="editions" class="section">
+    <div class="wrap">
+      <h2>Pick your edition</h2>
+      <p class="section-lead">Official editions are tested by the project. Community editions ship complete profiles and are supported at runtime.</p>
+
+      <div class="grid editions">
+        <div class="edition official"><span class="tag">Official</span><h3>Debian</h3><p>trixie · systemd · maximum hardware compatibility</p></div>
+        <div class="edition official"><span class="tag">Official</span><h3>FreeBSD</h3><p>14+ · bsd_rc · native ZFS and network stack</p></div>
+        <div class="edition"><span class="tag">Community</span><h3>Arch Linux</h3><p>systemd · ZFS from Chaotic-AUR</p></div>
+        <div class="edition"><span class="tag">Community</span><h3>Gentoo</h3><p>OpenRC · stage3 · Portage overlay</p></div>
+        <div class="edition"><span class="tag">Community</span><h3>Artix Linux</h3><p>OpenRC or dinit</p></div>
+        <div class="edition"><span class="tag">Community</span><h3>Void Linux</h3><p>runit</p></div>
+      </div>
+
+      <p class="note">
+        Works with <strong>systemd, OpenRC, runit, s6, dinit and bsd_rc</strong>.
+        Ubuntu runs on the Debian profile. RHEL-based systems are not supported yet.
+      </p>
+    </div>
+  </section>
+
+  <section id="install" class="section section-alt">
+    <div class="wrap">
+      <h2>Install</h2>
+      <p class="section-lead">Choose the path that fits your hardware.</p>
+
+      <div class="grid three">
+        <article class="card step">
+          <span class="step-num">A</span>
+          <h3>Pre-built image <small>recommended</small></h3>
+          <p>Flash the image for your edition onto the boot disk and power on. On first boot it imports your pools, then restores an existing configuration or opens the setup wizard. The same image boots on UEFI and BIOS.</p>
+        </article>
+        <article class="card step">
+          <span class="step-num">B</span>
+          <h3>Installer</h3>
+          <p>Boot the FreedomNAS live ISO for a clean install on a dedicated disk, or turn a machine that already runs a supported OS into a NAS in place.</p>
+          <div class="code-wrap">
+<pre><code>sudo freedomnas-install
+sudo freedomnas-install --mode inplace
+sudo freedomnas-install --dry-run</code></pre>
+          </div>
+        </article>
+        <article class="card step">
+          <span class="step-num">C</span>
+          <h3>Gentoo overlay</h3>
+          <p>Install and update FreedomNAS with Portage, like the rest of your system.</p>
+          <div class="code-wrap">
+<pre><code>eselect repository add freedomnas git \
+  https://codeberg.org/FreedomNAS/freedomnas-overlay.git
+emerge --ask app-nas/freedomnas</code></pre>
+          </div>
+        </article>
+      </div>
+
+      <p class="note">
+        Then open <code>https://&lt;your-nas&gt;:8080</code> in a browser to finish setup.
+        <a href="https://freedomnas.codeberg.page/freedomnas-docs/getting-started/overview/">Read the installation guide →</a>
+      </p>
+
+      <h3 class="req-title">System requirements</h3>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Component</th><th>Minimum</th><th>Recommended</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>CPU</td><td>64-bit x86</td><td>Any modern multi-core</td></tr>
+            <tr><td>RAM</td><td>2 GB</td><td>8 GB or more (ZFS likes memory)</td></tr>
+            <tr><td>Boot disk</td><td>16 GB</td><td>32 GB SSD</td></tr>
+            <tr><td>Data disks</td><td>1</td><td>2 or more, for mirror or RAIDZ</td></tr>
+            <tr><td>Network</td><td>1 × Ethernet</td><td>1 GbE or faster</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap grid two">
+      <div>
+        <h2>Free software</h2>
+        <p>
+          The FreedomNAS core is licensed under the
+          <a href="https://www.mozilla.org/MPL/2.0/">Mozilla Public License 2.0</a>.
+          The code, the profiles and the documentation are developed in the open on Codeberg.
+        </p>
+        <p class="muted">ProMonitor, the optional paid service for proactive weekly health reports, is proprietary.</p>
+      </div>
+      <div class="links">
+        <a class="link-card" href="https://freedomnas.codeberg.page/freedomnas-docs/">
+          <strong>Documentation</strong>
+          <span>User guide, architecture, profiles and API reference</span>
+        </a>
+        <a class="link-card" href="https://codeberg.org/FreedomNAS">
+          <strong>Codeberg</strong>
+          <span>Source code, issues and contributions</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="footer">
+  <div class="wrap footer-inner">
+    <span>© FreedomNAS Contributors · MPL-2.0</span>
+    <span>
+      <a href="https://freedomnas.codeberg.page/freedomnas-docs/">Docs</a> ·
+      <a href="https://codeberg.org/FreedomNAS">Codeberg</a>
+    </span>
+  </div>
+</footer>
+
+</body>
+</html>
